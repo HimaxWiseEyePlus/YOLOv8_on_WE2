@@ -38,9 +38,9 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
         ![alt text](images/gui_train_create_model_setting.png)
 - Set training setting 
     - Scroll down to set the advance setting 
-        - Please set input size to 192, which can fullfill the HIMAX WE2 setting 
+        - Please set input size to 192, which can fulfill the HIMAX WE2 setting 
             ![alt text](images/gui_train_training_setting.png)
-    - Connect to your own traing resource
+    - Connect to your own training resource
         - Google Colab 
             ![alt text](images/gui_train_training_setting_google.png)
             - please copy the Colab code 
@@ -54,7 +54,7 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     ![alt text](images/gui_train_training_progress.png)
 
 ## Export yolov8n object detection pytorch model to int8 tflite
-- After training process is done, then you will get the `best.pt`` which is the pytorch model.
+- After training process is done, then you will get the `best.pt` which is the pytorch model.
 - Use python code to export it to int8 tflite (full interger quant) by Ultralytics export API
     - If your training dataset is another, you should change the data yaml file.
         ```
