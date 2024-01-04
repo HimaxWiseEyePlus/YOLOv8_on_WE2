@@ -1,4 +1,5 @@
 # YOLOv8_on_WE2
+This is a repository which step by step teaches you how to use the "Ultralytics Hub" to train your own yolov8n model and deploy it to FVP.
 - The first part is [Yolov8n object detection part](https://github.com/HimaxWiseEyePlus/YOLOv8_on_WE2?tab=readme-ov-file#yolov8n-object-detection).
     - At this part will step by step teach you how to use the [Ultralytics Hub](https://hub.ultralytics.com/) to train your own yolov8n object detection model, pass the model using vela compiler with HIMAX WE2 setting.
 - The second part is [Yolov8n pose part](https://github.com/HimaxWiseEyePlus/YOLOv8_on_WE2?tab=readme-ov-file#yolov8n-pose).
