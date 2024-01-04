@@ -361,3 +361,8 @@ vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config M
     - First, you will see the input image on the screen.
     - Then, you will see the detection result with bbox and pose key-points on the screen.
     ![alt text](images/Yolov8_pose_run_inference_coco_person_result.png)
+
+#Reference
+1. https://github.com/ultralytics/ultralytics
+2. https://github.com/PINTO0309/onnx2tf
+3. https://github.com/DeGirum/ultralytics_yolov8
