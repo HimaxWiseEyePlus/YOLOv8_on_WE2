@@ -114,9 +114,9 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
         1. Be careful, the `op_name` and `param_name` should be changed if needed, depending on the `op_name` and `param_name` of your converted `onnx file` . 
         2. If your output class is not 80, you should modify `replace_192_80cls_transpose_op.json` to replace `144` value to `64+{class_num}`. For example, class_num is `1`, you should modify `replace_192_80cls_transpose_op.json` to replace `144` value to `65`, and then it could be correct.
 - Finally, you can delete 4 `transpose op`, at final int8 tflite.
-    - original tflite
+    - original tflite which pass vela
         ![alt text](images/yolov8n_od_5_transpose.png) 
-    - delete 4 transpose tflite
+    - delete 4 transpose tflite which pass vela
         ![alt text](images/yolov8n_od_delte_transpose.png) 
 
 # Yolov8n pose
