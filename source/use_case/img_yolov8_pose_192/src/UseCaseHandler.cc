@@ -487,7 +487,8 @@ void  yolov8_NMSBoxes(std::vector<box> &boxes,std::vector<float> &confidences,fl
  * float *stride_756_1: stride matrix value
  * **/
 // void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float anchor_756_2[][2],float *stride_756_1 )
-void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anchor_756_2,float *stride_756_1 )
+// void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anchor_756_2,float *stride_756_1 )
+void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anchor_756_2,float *stride_756_1, int *out_dim_size )
 {
     float  xywh_result[4];
     //do DFL (softmax and than do conv2d)
@@ -499,20 +500,20 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
         for(int i = 0 ; i < 16 ; i++)
         {
             float tmp_result = 0;
-            if(j<576)
+            if(j < out_dim_size[0])
             {
                 output_data_idx = 1;
                 tmp_result = yolov8_pose_bbox_dequant_value(j, k*16+i,output[output_data_idx]);
             }
-            else if(j<720)
+            else if(j < out_dim_size[1])
             {
                 output_data_idx = 0;
-                tmp_result = yolov8_pose_bbox_dequant_value(j-576, k*16+i,output[output_data_idx]);
+                tmp_result = yolov8_pose_bbox_dequant_value(j - out_dim_size[0], k*16+i,output[output_data_idx]);
             }
             else 
             {
                 output_data_idx = 5;
-                tmp_result = yolov8_pose_bbox_dequant_value(j-720, k*16+i,output[output_data_idx]);
+                tmp_result = yolov8_pose_bbox_dequant_value(j - out_dim_size[1], k*16+i,output[output_data_idx]);
             }
             tmp_arr_softmax_conv2d[i] = tmp_result;
             // tmp_arr_softmax_conv2d[i] = outputs_data_756_64[j][k*16+i];
@@ -705,12 +706,32 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
                 printf("output_scale[%d]: %f\r\n",i,output_scale[i]);
             }
             //////////////////////////////////////////////////////////////////////////////////// split output yolov8 post-proccessing
+            int dim_total_size = 0;
 
+            int dim_stride = 8;
+            int dim_stride_8_size = pow((INPUT_IMAGE_SIZE/dim_stride),2);
+            for(int i = 0; i < 3;i++)
+            {
+                if(i==0)
+                {
+                    dim_stride = 8;
+                }
+                else if(i==1)
+                {
+                    dim_stride = 16;
+                }
+                else
+                {
+                    dim_stride = 32;
+                }
+                dim_total_size  += pow((INPUT_IMAGE_SIZE/dim_stride),2);
+            }
             ///// construct stride matrix 
             printf("construct stride matrix start\r\n");
             // float stride_756_1[756];
             float* stride_756_1;
-            stride_756_1 = (float*)calloc(756, sizeof(float));
+            // stride_756_1 = (float*)calloc(756, sizeof(float));
+            stride_756_1 = (float*)calloc(dim_total_size, sizeof(float));
             int stride = 8;
             int start_stride_step = 0;
             int max_stride_step = pow((INPUT_IMAGE_SIZE/stride),2);
@@ -748,8 +769,13 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
             printf("construct anchor matrix start\r\n");
             // float anchor_756_2[756][2];
             float ** anchor_756_2;
-            anchor_756_2 = (float**)calloc(756, sizeof(float *));
-            for(int i=0;i<756;i++)
+            // anchor_756_2 = (float**)calloc(756, sizeof(float *));
+            // for(int i=0;i<756;i++)
+            // {
+            //     anchor_756_2[i] = (float*)calloc(2, sizeof(float));
+            // }
+            anchor_756_2 = (float**)calloc(dim_total_size, sizeof(float *));
+            for(int i=0;i<dim_total_size;i++)
             {
                 anchor_756_2[i] = (float*)calloc(2, sizeof(float));
             }
@@ -802,8 +828,8 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
     
             ////////////////////////// caculate key-point start
             ////////////////////////// caculate key-point end
-            int input_w=192;
-            int input_h=192;
+            int input_w=INPUT_IMAGE_SIZE;
+            int input_h=INPUT_IMAGE_SIZE;
             // init postprocessing 	
             int num_classes = 1;
 
@@ -827,34 +853,56 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
             std::vector<box> boxes;
             std::vector< struct_human_pose_17> kpts_vector;
             int output_data_idx;
-            for(int dims_cnt_1=0;dims_cnt_1<756;dims_cnt_1++)
+            int out_dim_total = 0;
+            int out_dim_size_num = (numOutputs - 1) / 2;
+            int out_dim_size[out_dim_size_num];
+            for(int out_num = 0; out_num < out_dim_size_num; out_num++)
+            {
+                if(out_num==0)
+                {
+                    output_data_idx = 4;
+                }
+                else if(out_num==1)
+                {
+                    output_data_idx = 6;
+                }
+                else
+                {
+                    output_data_idx = 2;
+                }
+                out_dim_total += output[output_data_idx]->dims->data[1];
+                out_dim_size[out_num] = out_dim_total;
+            }
+
+
+            for(int dims_cnt_1=0;dims_cnt_1<out_dim_total;dims_cnt_1++)
             {
                 //////conferen ok
                 // float maxScore = sigmoid(outputs_data_756_1[dims_cnt_1]);// the first four indexes are bbox information
                 float maxScore = 0;
 
                 float tmp_result = 0;
-                if(dims_cnt_1<576)
+                if(dims_cnt_1 < out_dim_size[0])
                 {
                     output_data_idx = 4;
                     maxScore = sigmoid(yolov8_pose_bbox_dequant_value(dims_cnt_1, 0,output[output_data_idx]));
                 }
-                else if(dims_cnt_1<720)
+                else if(dims_cnt_1 < out_dim_size[1])
                 {
                     output_data_idx = 6;
-                    maxScore = sigmoid(yolov8_pose_bbox_dequant_value(dims_cnt_1-576, 0, output[output_data_idx]));
+                    maxScore = sigmoid(yolov8_pose_bbox_dequant_value(dims_cnt_1 - out_dim_size[0], 0, output[output_data_idx]));
                 }
                 else 
                 {
                     output_data_idx = 2;
-                    maxScore = sigmoid(yolov8_pose_bbox_dequant_value(dims_cnt_1-720, 0,output[output_data_idx]));
+                    maxScore = sigmoid(yolov8_pose_bbox_dequant_value(dims_cnt_1 - out_dim_size[1], 0,output[output_data_idx]));
                 }
                 int maxClassIndex = 0;
                 // if (maxScore >= 0.25)
                 if (maxScore >= modelScoreThreshold)
                 {
                     box bbox;
-                    yolov8_pose_cal_xywh(dims_cnt_1,output,&bbox, anchor_756_2,stride_756_1 );
+                    yolov8_pose_cal_xywh(dims_cnt_1,output,&bbox, anchor_756_2,stride_756_1,out_dim_size );
                   
                     boxes.push_back(bbox);
                     class_ids.push_back(maxClassIndex);
@@ -941,7 +989,7 @@ void yolov8_pose_cal_xywh(int j,TfLiteTensor* output[7], box *bbox, float** anch
             printf("nms_result.size():%d\r\n",nms_result.size());
 
             free(stride_756_1);
-            for(int i=0;i<756;i++)
+            for(int i=0;i<dim_total_size;i++)
             {
                 free(anchor_756_2[i]);
             }
