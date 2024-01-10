@@ -137,6 +137,8 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     
     cd ..
     python dg_export_int8_output.py --weights="yolov8n-pose.pt"  --img=192
+    #or
+    python dg_export_int8_output.py --weights="yolov8n-pose.pt"  --img=256
     ```
 - The [DeGirum/ultralytics_yolov8](https://github.com/DeGirum/ultralytics_yolov8) repository exporting a YOLOv8n pose model with 7 separate outputs improved performance in quantized model.
 ## How to use HIMAX config file to generate vela model
@@ -239,6 +241,10 @@ vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config M
             cp -r ./resources/img_yolov8_pose_192 ./ml-embedded-evaluation-kit/resources
             cp -r ./source/use_case/img_yolov8_pose_192 ./ml-embedded-evaluation-kit/source/use_case
             cp -r ./vela/img_yolov8_pose_192 ./ml-embedded-evaluation-kit/resources_downloaded/
+
+            cp -r ./resources/img_yolov8_pose_256 ./ml-embedded-evaluation-kit/resources
+            cp -r ./source/use_case/img_yolov8_pose_256 ./ml-embedded-evaluation-kit/source/use_case
+            cp -r ./vela/img_yolov8_pose_256 ./ml-embedded-evaluation-kit/resources_downloaded/
             ```
 ## Build with Yolov8n Object detection tflite model passing vela
 - Go under folder of ml-embedded-evaluation-kit
@@ -361,6 +367,37 @@ vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config M
     - First, you will see the input image on the screen.
     - Then, you will see the detection result with bbox and pose key-points on the screen.
     ![alt text](images/Yolov8_pose_run_inference_coco_person_result.png)
+
+
+
+## Build with Yolov8n pose tflite model (input size = 256) passing vela
+- Go under folder of ml-embedded-evaluation-kit
+    ```
+    cd ml-embedded-evaluation-kit
+    ```
+- First, Create the output file and go under the folder
+    ```
+    mkdir build_img_yolov8_pose_256 && cd build_img_yolov8_pose_256
+    ```
+
+- Second, Configure the Yolov8n pose example and set ETHOS_U_NPU_ENABLED to be ON.And you can run with Ethos-U55 NPU.
+    ```
+    cmake ../ -DUSE_CASE_BUILD=img_yolov8_pose_256 \-DETHOS_U_NPU_ENABLED=ON
+    ```
+- Compile the Yolov8n pose example
+    ```
+    make -j8
+    ```
+## Run with Yolov8n pose tflite model (input size = 256) and inference using Ethos-U55 NPU and m55
+- Go out and under the folder of YOLOv8_on_WE2
+    ```
+    cd ../../
+    ```
+- Run with the commad about
+    ```
+    CS300FVP/models/Linux64_GCC-6.4/FVP_Corstone_SSE-300_Ethos-U55 -C ethosu.num_macs=64 ml-embedded-evaluation-kit/build_img_yolov8_pose_256/bin/ethos-u-img_yolov8_pose_256.axf
+    ```
+    Be careful of the `ethosu.num_macs` number of the MACS at the command. If you use missmatch MACS number with vela model, it will be invoke fail. 
 
 # Reference
 1. https://github.com/ultralytics/ultralytics
