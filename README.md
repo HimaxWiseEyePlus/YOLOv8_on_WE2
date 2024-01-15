@@ -148,7 +148,7 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     ```
     python dg_train_pose.py --weights="yolov8n-pose.pt"  --img=256
     ```
-- After training process is done, then you will get the `best.pt` which is the pytorch model. Next, it will automatically generate the `best_save_model/best_full_integer_quant.tflite`. Just generate the vela model by pass the `best_save_model/best_full_integer_quant.tflite` to vela compiler, and you can run the model which you retrain on WE2.
+- After training process is done, then you will get the `best.pt` which is the pytorch model. Next, it will automatically generate the `best_save_model/best_full_integer_quant.tflite`. Just generate the vela model by passing the `best_save_model/best_full_integer_quant.tflite` to vela compiler, and you can run the model which you retrain on WE2.
 
 ## How to use HIMAX config file to generate vela model
 - You can reference [here](https://github.com/HimaxWiseEyePlus/ML_FVP_EVALUATION?tab=readme-ov-file#how-to-use-himax-config-file-to-generate-vela-model).
