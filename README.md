@@ -4,6 +4,7 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     - At this part will step by step teach you how to use the [Ultralytics Hub](https://hub.ultralytics.com/) to train your own yolov8n object detection model, pass the model using vela compiler with HIMAX WE2 setting.
 - The second part is [Yolov8n pose part](https://github.com/HimaxWiseEyePlus/YOLOv8_on_WE2?tab=readme-ov-file#yolov8n-pose).
     - At this part will use the pre-trained model yolov8n-pose and use [DeGirum/ultralytics_yolov8](https://github.com/DeGirum/ultralytics_yolov8) to convert the pre-trained weight to int8 tflite, pass the model using vela compiler with HIMAX WE2 setting.
+    - Second, you can also retrain the yolov8n pose model.
 - Finally, [deploy YOLOv8n to FVP](https://github.com/HimaxWiseEyePlus/YOLOv8_on_WE2?tab=readme-ov-file#deploy-yolov8n-to-fvp).
     - The example including
         - [Yolov8n object detection](https://github.com/HimaxWiseEyePlus/YOLOv8_on_WE2?tab=readme-ov-file#build-with-yolov8n-object-detection-tflite-model-passing-vela)
@@ -141,6 +142,14 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     python dg_export_int8_output.py --weights="yolov8n-pose.pt"  --img=256
     ```
 - The [DeGirum/ultralytics_yolov8](https://github.com/DeGirum/ultralytics_yolov8) repository exporting a YOLOv8n pose model with 7 separate outputs improved performance in quantized model.
+
+## Retrain yolov8n pose pytorch model and export it to int8 tflite
+- You can train the yolov8n pose model on your own PC.
+    ```
+    python dg_train_pose.py --weights="yolov8n-pose.pt"  --img=256
+    ```
+- After training process is done, then you will get the `best.pt` which is the pytorch model. Next, it will automatically generate the `best_save_model/best_full_integer_quant.tflite`. Just generate the vela model by pass the `best_save_model/best_full_integer_quant.tflite` to vela compiler, and you can run the model which you retrain on WE2.
+
 ## How to use HIMAX config file to generate vela model
 - You can reference [here](https://github.com/HimaxWiseEyePlus/ML_FVP_EVALUATION?tab=readme-ov-file#how-to-use-himax-config-file-to-generate-vela-model).
 - Go under vela folder
