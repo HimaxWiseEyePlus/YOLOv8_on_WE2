@@ -146,9 +146,22 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
 ## Retrain yolov8n pose pytorch model and export it to int8 tflite
 - You can train the yolov8n pose model on your own PC.
     ```
+    pip install tensorflow==2.13.1
+    pip install onnx2tf==1.15.4
+    pip install -U onnx==1.15.0 \
+    && pip install -U nvidia-pyindex \
+    && pip install -U onnx-graphsurgeon \
+    && pip install -U onnxruntime==1.16.3 \
+    && pip install -U onnxsim==0.4.33 \
+    && pip install -U simple_onnx_processing_tools \
+    && pip install -U onnx2tf \
+    && pip install -U h5py==3.7.0 \
+    && pip install -U psutil==5.9.5 \
+    && pip install -U ml_dtypes==0.2.0
     python dg_train_pose.py --weights="yolov8n-pose.pt"  --img=256
     ```
 - After training process is done, then you will get the `best.pt` which is the pytorch model. Next, it will automatically generate the `best_save_model/best_full_integer_quant.tflite`. Just generate the vela model by passing the `best_save_model/best_full_integer_quant.tflite` to vela compiler, and you can run the model which you retrain on WE2.
+    ![alt text](images/Yolov8_pose_export.png)
 
 ## How to use HIMAX config file to generate vela model
 - You can reference [here](https://github.com/HimaxWiseEyePlus/ML_FVP_EVALUATION?tab=readme-ov-file#how-to-use-himax-config-file-to-generate-vela-model).
