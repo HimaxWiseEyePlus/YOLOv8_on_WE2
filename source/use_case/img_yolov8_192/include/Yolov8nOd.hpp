@@ -18,7 +18,7 @@
 #define IMG_Yolov8nOd_HPP
 
 #include "Model.hpp"
-
+#include <cstdint>
 namespace arm {
 namespace app {
 

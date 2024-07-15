@@ -18,7 +18,7 @@
 #define IMG_Yolov8nOd_EVT_HANDLER_HPP
 
 #include "AppContext.hpp"
-
+#include <cstdint>
 namespace arm {
 namespace app {
 

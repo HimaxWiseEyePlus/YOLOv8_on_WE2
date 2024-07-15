@@ -17,7 +17,7 @@
 #ifndef DETECTION_RESULT_HPP
 #define DETECTION_RESULT_HPP
 
-
+#include <cstdint>
 namespace arm {
 namespace app {
 namespace object_detection {
