@@ -99,7 +99,7 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
     ```
     vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config My_Sys_Cfg --memory-mode My_Mem_Mode_Parent --output-dir ./img_yolov8_192 ./img_yolov8_192/yolov8n_full_integer_quant_size_192.tflite
     ```
-- You will see the vela report on the terminal: 
+- You will see the vela report on the terminal: : (Notes: `Total SRAM used` less than `1MB` will be better)
     - There are 5 transpose ops leak out the vela compiler, and it will be fall back to run on Cortex-M55 CPU. 
     ![alt text](images/yolov8n_vela_report.png)
 
@@ -182,7 +182,7 @@ pip install ethos-u-vela
 ```
 vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config My_Sys_Cfg --memory-mode My_Mem_Mode_Parent --output-dir ./img_yolov8_pose_192 ./img_yolov8_pose_192/yolov8n-pose_full_integer_quant.tflite
 ```
-- You will see the vela report on the terminal: 
+- You will see the vela report on the terminal: (Notes: `Total SRAM used` less than `1MB` will be better)
     - There are 4 transpose ops leak out the vela compiler, and it will be fall back to run on Cortex-M55 CPU. 
     ![alt text](images/yolov8n_pose_vela_report.png)
 

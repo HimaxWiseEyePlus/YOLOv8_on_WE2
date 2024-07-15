@@ -400,7 +400,8 @@ def set_up_resources(
                             metadata_dict.get('set_up_script_md5sum') == setup_script_hash)
         else:
             raise
-
+    command = "unzip ../env.zip -d ./resources_downloaded/"
+    call_command(command)
     # 1.2 Does the virtual environment exist?
     env_python = str(
         os.path.abspath(os.path.join(download_dir, "env", "bin", "python3"))
