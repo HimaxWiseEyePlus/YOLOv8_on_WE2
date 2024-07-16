@@ -203,6 +203,8 @@ vela --accelerator-config ethos-u55-64 --config himax_vela.ini --system-config M
         sudo apt install python3
 
         sudo apt install python3.8-venv
+
+        sudo apt-get install libpython3.8-dev
         ```
     - Corstone SSE-300 FVP: aligned with the Arm MPS3 development platform and includes both the Cortex-M55 and the Ethos-U55 processors.
         ```
