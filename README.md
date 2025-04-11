@@ -107,7 +107,7 @@ This is a repository which step by step teaches you how to use the "Ultralytics 
 - If there are many transpose OP run on CPU, it will be slow.
 - At the [Ultralytics](https://github.com/ultralytics/ultralytics) repositroy, it use [PINTO0309's onnx2tf](https://github.com/PINTO0309/onnx2tf) tool to convert the onnx model to int8 tflite.
 - First, we can convert pytroch to onnx model.
-- Second, add the following command at the `ultralytics repository v8.0.173` (https://github.com/ultralytics/ultralytics/blob/v8.0.173/ultralytics/engine/exporter.py#L690) which use `onnx2tf cli command` to convert the tflite and at [latest version which]([https://github.com/ultralytics/ultralytics/blob/main/ultralytics/engine/exporter.py#L1080](https://github.com/ultralytics/ultralytics/blob/v8.3.107/ultralytics/engine/exporter.py#L971)) use `onnx2tf.convert` function. (please reference the tutorial [here](https://github.com/PINTO0309/onnx2tf?tab=readme-ov-file#parameter-replacement))
+- Second, add the following command at the `ultralytics repository v8.0.173` (https://github.com/ultralytics/ultralytics/blob/v8.0.173/ultralytics/engine/exporter.py#L690) which use `onnx2tf cli command` to convert the tflite and at [latest version which](https://github.com/ultralytics/ultralytics/blob/v8.3.107/ultralytics/engine/exporter.py#L971) use `onnx2tf.convert` function. (please reference the tutorial [here](https://github.com/PINTO0309/onnx2tf?tab=readme-ov-file#parameter-replacement))
     ```
      -prf {param_replacement.json} -rtpo 
     ```
